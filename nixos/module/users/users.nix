@@ -3,13 +3,13 @@
 
 let
   inherit (import ../../variables.nix) mainUser;
-  home-manager = import (builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz") { };
+  home-manager = import (builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-23.11.tar.gz") { };
 in
 
 {
   imports = [ home-manager.nixos ];
 
-  home-manager.users.${mainUser} = import ./bg/home.nix;
+  home-manager.users.${mainUser} = import ./alina/home.nix;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";

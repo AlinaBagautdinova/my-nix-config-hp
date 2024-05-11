@@ -1,5 +1,5 @@
 {pkgs, ...}: let
-  user = "bg";
+  user = "alina";
 in {
   containers.wasabi = {
     # https://nixos.wiki/wiki/NixOS_Containers

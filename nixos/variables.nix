@@ -1,4 +1,4 @@
 {
-  mainUser = "bg";
+  mainUser = "alina";
   nixosConfigDir = "/etc/nixos";
 }

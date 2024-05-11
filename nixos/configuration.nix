@@ -6,11 +6,14 @@
 , ...
 }:
 let
+  user = "alina";
+  #home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
 in
 {
   imports = [
     # Include the results of the hardware scan.
-    #<home-manager/nixos>
+    # <home-manager/nixos>
+    #(import "${home-manager}/nixos")
     ./hardware-configuration.nix
     ./cachix.nix
     # ./module/wordpress.nix
@@ -19,14 +22,23 @@ in
     ./module/users/users.nix
   ];
 
+  #home-manager.users.alina = {
+  #  home.stateVersion = "24.05";
+  #};
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
 
   boot.supportedFilesystems = [ "ntfs" ];
 
+  services.xserver.videoDrivers = [ "modesetting" ];
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -58,57 +70,46 @@ in
     GTK_THEME = "Adwaita:dark";
   };
 
-  programs.gnupg.agent.pinentryFlavor = "gnome3";
-  programs.dconf.enable = true;
-
-
   # Enable the X11 windowing system.
-  services = {
-    dbus.packages = [ pkgs.dconf ];
-    udev.packages = [ pkgs.gnome3.gnome-settings-daemon ];
-    xserver = {
-      # gsettings set org.gnome.desktop.wm.keybindings switch-input-source "['<Alt>Shift_L']"
-      # gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
-      # gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Open Terminal'
-      # gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'kgx'
-      # gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'kitty'
-      # gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Primary><Alt>T'
-      enable = true;
-      videoDrivers = [ "modesetting" ];
-      layout = "us,ru";
-      # xkbVariant = "workman,";
-      #xkbOptions = "grp:win_space_toggle";
-      # xkbOptions = "grp:ctrl_shift_toggle";
-      displayManager.gdm.enable = true;
-      displayManager.gdm.wayland = false;
-      # desktopManager.gnome.enable = true;
-      desktopManager.gnome.enable = true;
-      libinput.enable = true;
+  services.xserver = {
+    # gsettings set org.gnome.desktop.wm.keybindings switch-input-source "['<Alt>Shift_L']"
+    # gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+    # gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Open Terminal'
+    # gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'kgx'
+    # gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'kitty'
+    # gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Primary><Alt>T'
+    enable = true;
+    layout = "us,ru";
+    # xkbVariant = "workman,";
+    #xkbOptions = "grp:win_space_toggle";
+    # xkbOptions = "grp:ctrl_shift_toggle";
+    displayManager.gdm.enable = true;
+    displayManager.gdm.wayland = false;
+    desktopManager.gnome.enable = true;
 
-      # desktopManager.gnome = {
-      #   extraGSettingsOverridePackages = with pkgs; [ gnome.gnome-settings-daemon ];
-      #   extraGSettingsOverrides = ''
-      #     # switch language
-      #     [org.gnome.desktop.wm.keybindings]
-      #     switch-input-source="['<Alt>Shift_L']"
-      #
-      #     # Favorite apps in gnome-shell
-      #     # [org.gnome.settings-daemon.plugins.media-keys]
-      #     # custom-keybindings = "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']";
-      #       [org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0]
-      #       binding='<Primary><Alt>T'
-      #       command='kgx'
-      #       name='Open terminal'
-      #   '';
-      # };
+    # desktopManager.gnome = {
+    #   extraGSettingsOverridePackages = with pkgs; [ gnome.gnome-settings-daemon ];
+    #   extraGSettingsOverrides = ''
+    #     # switch language
+    #     [org.gnome.desktop.wm.keybindings]
+    #     switch-input-source="['<Alt>Shift_L']"
+    #
+    #     # Favorite apps in gnome-shell
+    #     # [org.gnome.settings-daemon.plugins.media-keys]
+    #     # custom-keybindings = "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']";
+    #       [org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0]
+    #       binding='<Primary><Alt>T'
+    #       command='kgx'
+    #       name='Open terminal'
+    #   '';
+    # };
 
-      # Настройка пользовательских клавишных комбинаций
-      # displayManager.sessionCommands = ''
-      #   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Open Terminal'
-      #   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'kgx'
-      #   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Primary><Alt>T'
-      # '';
-    };
+    # Настройка пользовательских клавишных комбинаций
+    # displayManager.sessionCommands = ''
+    #   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'Open Terminal'
+    #   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'kgx'
+    #   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding '<Primary><Alt>T'
+    # '';
   };
 
   # Enable the GNOME Desktop Environment.
@@ -117,7 +118,6 @@ in
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  services.lorri.enable = true; # replace default nix-shell
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -139,8 +139,44 @@ in
   # };
 
   # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
 
   # nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # users.extraGroups.docker.members = ["username-with-access-to-socket"];
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.${user} = {
+    isNormalUser = true;
+    description = "${user}";
+    extraGroups = [ "networkmanager" "wheel" "docker" "podman" "input" "audio" ]; #
+    # openssh = {
+    #   authorizedKeys.keys = ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnLD+dQsKPhCV3eY0lMUP4fDrECI1Boe6PbnSHY+eqRpkA/Nd5okdyXvynWETivWsKdDRlT3gIVgEHqEv8s4lzxyZx9G2fAgQVVpBLk18G9wkH0ARJcJ0+RStXLy9mwYl8Bw8J6kl1+t0FE9Aa9RNtqKzpPCNJ1Uzg2VxeNIdUXawh77kIPk/6sKyT/QTNb5ruHBcd9WYyusUcOSavC9rZpfEIFF6ZhXv2FFklAwn4ggWzYzzSLJlMHzsCGmkKmTdwKijkGFR5JQ3UVY64r3SSYw09RY1TYN/vQFqTDw8RoGZVTeJ6Er/F/4xiVBlzMvxtBxkjJA9HLd8djzSKs8yf amnesia@amnesia"];
+    # };
+    packages = with pkgs; [
+      neovim
+      fzf
+      fd
+      lazygit
+      gdu
+      bottom
+      nodejs_18
+
+      obfs4
+      vim
+      ripgrep
+      git
+      wget
+      htop
+      curl
+      tmux
+      wget
+      direnv
+      kitty
+      gnome.gnome-shell
+      shadowsocks-libev
+      google-chrome
+    ];
+  };
 
   # sudo ss-local -v -c ./shadowsocks.json
   # sudo ss-local -v -c /etc/shadowsocks-libev/config.json
@@ -168,6 +204,10 @@ in
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
   # environment.binsh = "${pkgs.dash}/bin/dash";
+
+  # Enable automatic login for the user.
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "${user}";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
@@ -206,6 +246,13 @@ in
     # kitty
   ];
 
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
 
   # List services that you want to enable:
 
@@ -217,7 +264,7 @@ in
   networking.nat = {
     enable = true;
     internalInterfaces = [ "ve-+" ];
-    externalInterface = "wlp0s20f3";
+    externalInterface = "wlo1";
     # Lazy IPv6 connectivity for the container
     enableIPv6 = true;
   };
@@ -238,7 +285,7 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "unstable"; # Did you read the comment?
 
   nix = {
     package = pkgs.nixFlakes;
@@ -281,8 +328,19 @@ in
     # socks5 127.0.0.1 9063
   '';
 
-
   # programs.hyprland.enable = true;
+
+  # xremap
+  # hardware.uinput.enable = true;
+  # users.groups.uinput.members = [ "${user}" ];
+  # users.groups.input.members = [ "${user}" ];
+
+  # not work
+  # services.udev.extraRules = ''
+  #   # KERNEL=="event[0-9]*", GROUP="${user}", MODE:="0660"
+  # KERNEL=="uinput", GROUP = "${user}", MODE:="0660"
+  #   SUBSYSTEM=="input", GROUP="input", MODE="0666"
+  # '';
 
   services.flatpak.enable = true;
   hardware.bluetooth.enable = true; # enables support for Bluetooth
@@ -313,18 +371,12 @@ in
   swapDevices = [
     {
       device = "/var/lib/swapfile";
-      size = 16 * 1024;
+      size = 14 * 1024;
     }
   ];
 
   # https://github.com/gvolpe/nix-config/blob/0ed3d66f228a6d54f1e9f6e1ef4bc8daec30c0af/system/configuration.nix#L161
   fonts.packages = with pkgs; [
-    times-newer-roman
+	  times-newer-roman
   ];
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
 }
