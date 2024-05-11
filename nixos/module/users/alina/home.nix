@@ -401,8 +401,8 @@ in
 
   programs.git = {
     enable = true;
-    userName = "back2nix";
-    userEmail = "back2nix@list.ru";
+    userName = "AlinaBagautdinova";
+    userEmail = "bagautdinova2807@gmail.com";
     aliases = {
       pu = "push";
       co = "checkout";
