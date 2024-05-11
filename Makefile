@@ -5,6 +5,7 @@ REPO_DIR := my-astronvim-config
 nix:
 	sudo nixos-rebuild switch
 
+#
 # home:
 # 	home-manager switch
 #
