@@ -357,7 +357,7 @@ in
       '';
       fl = ''git log --oneline --color=always | fzf --ansi --preview=" echo { } | cut - d ' ' - f 1 | xargs - I @ sh -c 'git log --pretty=medium -n 1 @; git diff @^ @' | bat --color=always" | cut -d ' ' -f 1 | xargs git log --pretty=short -n 1'';
       gd = "git diff --name-only --diff-filter=d $@ | xargs bat --diff";
-      cdnix = "cd ~/Documents/code/github.com/alina/my-nix-config-huawei";
+      cdnix = "cd ~/Documents/code/github.com/alina/my-nix-config-hp";
       cdinfo = "cd ~/Documents/code/github.com/alina/info";
       clip = "head -c -1|xclip -i -selection clipboard";
       rd = "readlink -f";
