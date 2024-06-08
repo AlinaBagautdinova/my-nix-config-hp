@@ -9,6 +9,10 @@ let
   # zellij = pkgs.callPackage ./zellij.nix {
   #   inherit (pkgs.darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   # };
+  nixvim = import (builtins.fetchGit {
+    url = "https://github.com/nix-community/nixvim";
+    # When using a different channel you can use `ref = "nixos-<version>"` to set it here
+  });
 in
 {
   imports = [
@@ -17,6 +21,8 @@ in
     # ./mime.nix
     # ./overlays.nix
     ./dconf.nix
+    nixvim.homeManagerModules.nixvim
+    ./nixvim/nixvim.nix
   ];
 
   nixpkgs.overlays = [
@@ -197,6 +203,8 @@ in
     # gnome.gnome-terminal
     libreoffice-qt
     jupyter-all
+    skypeforlinux
+    go
   ];
 
   nixpkgs.config.permittedInsecurePackages = [
@@ -264,7 +272,7 @@ in
   };
 
   programs.neovim = {
-    enable = true;
+    enable = false;
     defaultEditor = true;
     plugins = with pkgs.vimPlugins; [
       # ...
