@@ -206,6 +206,7 @@ in
     jupyter-all
     skypeforlinux
     go
+    postman
   ];
 
   nixpkgs.config.permittedInsecurePackages = [
